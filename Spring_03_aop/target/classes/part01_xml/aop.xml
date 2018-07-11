@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+	<!-- 여기서 선언을 해주어야 한다. -->
+	<!-- 타겟을 정의해논다. -->
+	<!-- target 핵심관심사항 bean설정 -->
+	<bean id="svc" class="part01_xml.ServiceImp"></bean>
+
+	<!-- aspect - 공통관심사항 빈선언 -->
+	<!-- 공통부분을 참조하기 위해서 쓰는 것. -->
+	<bean id="common" class="part01_xml.AspectCommon"></bean>
+
+
+	<!-- 어드바이스를 설정 : 어디에 어느시점에 공통관심(aspectcommon)을 실행하는 지 -->
+	<!-- aop어노테이션을 이용해서 해놓으면된다 -->
+	<aop:config>
+	  <aop:aspect ref="common"> <!-- common을 참조,,, -->
+	  
+	  <!-- (before) : 포인트 컷을 실행하기 전에 before메소드를 실행해라 이런소리. 
+	  공통관심을 먼저 수행하는것.-->
+	  <!-- * part01_xml.ServiceImp.* () 메소드 이름을 안써놓고 * () 이렇게 해놓으면 모든 메소드에 before method가 적용이 된다. -->
+	  <!-- 메소드를 아예지정해서 써주면 호출했을때 그 메소드에서만  aop:before method="comm1" 이 메소드가 적용되서 나온다.-->
+	  
+	  <!-- * <- prn메소드의 접근제어자 이다.(일반적으로 *로 쓴다.)
+	  그 뒤에있는 건 패키지. 클래스. 메소드명 -->
+	  <!-- 포인트컷이 길때는 포인트컷만 따로 빼서 위에서 설정한다음, 참조해서 사용을 한다. -->
+	     <!-- <aop:before method="comm1"  
+	     
+	     pointcut="execution(* part01_xml.ServiceImp.prn1())"/> --> <!-- 서비스임프(핵심관심)가 있는 패키지를 써준다 -->
+	     
+	  <!-- 포인트컷이너무길때 따로빼서 참조해서 쓰는 방법. -->
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn1(..))" id="aa"/>
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn2(..))" id="bb"/>
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn3(..))" id="cc"/>
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn4(..))" id="dd"/>
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn5(..))" id="ee"/>
+	  <!-- 일반적으로 모든인자값을 적용시키겠다는(..)를 많이 쓴다. -->
+	  
+	  <aop:before method="comm1" pointcut-ref="aa"/>
+	  <aop:after method="comm2" pointcut-ref="bb"/> <!-- prn2메소드를 수행한후 comm2를 수행하라는 소리. -->
+	  <aop:after-returning method="comm3" pointcut-ref="cc" returning="name"/>
+	  <!-- 네임에다가 홍길동이라는 리턴한 값을 넣어준다는 소리이다. -->
+	  <!-- after는 핵심로직을 먼저 수행하라는 소리이다. -->
+	  
+	  <!-- prn4의 매개변수 이름이랑 똑같아야 한다.throwing -->
+	  <aop:after-throwing method="comm4" pointcut-ref="dd" throwing="ex"/>
+	  <aop:around method="comm5" pointcut-ref="ee"/>
+	  
+	  <!-- 메소드에 인자값이 하나있을때 적용되게 하겠다. ->*를 하나 추가해줌. prn1(*)-->
+	  <!-- prn1(*) <-모든 인자값 적용되게 하기 -->
+	  <!-- prn(",",*) <-이렇게하면 인자 값 두개를 적용시키겠다 라는 뜻이다. -->
+	  
+	  <aop:pointcut expression="execution(* part01_xml.ServiceImp.prn1(..))" id=""/>
+	  
+	  
+	  
+	  </aop:aspect>
+	</aop:config>
+
+
+
+
+</beans>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+     <!-- 어노테이션으로 우리가 어드바이스를 설정했다는 것을 여기서 알려주는 것이다. -->
+     <!-- 어노테이션을 이용해서 advice를 설정할때 명시한다. -->
+     <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+     
+     
+     
+	<!-- 여기서 선언을 해주어야 한다. -->
+	<!-- 타겟을 정의해논다. -->
+	<!-- target 핵심관심사항 bean설정 -->
+	<bean id="svc" class="part02_annotation.ServiceImp"></bean>
+
+	<!-- aspect - 공통관심사항 빈선언 -->
+	<!-- 공통부분을 참조하기 위해서 쓰는 것. -->
+	<bean id="common" class="part02_annotation.AspectCommon"></bean>
+
+    <!-- 어드바이스와 등등 설정한거 다 지움. 위에서 자동적으로 처리가 되도록 . -->
+
+
+</beans>
